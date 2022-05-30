@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "900432833081",
+    "firebase_url": "https://e-change-d775a-default-rtdb.firebaseio.com",
+    "project_id": "e-change-d775a",
+    "storage_bucket": "e-change-d775a.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:900432833081:android:4770003d77f245a51a7be8",
+        "android_client_info": {
+          "package_name": "com.example.e_change"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "900432833081-dpk1a7pdaddbqjn9qd55jrqvcgoj3bu1.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCDkDy3A3WIX0wVammHzn3EkQ_E58_U3K8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "900432833081-dpk1a7pdaddbqjn9qd55jrqvcgoj3bu1.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
