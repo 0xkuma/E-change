@@ -7,7 +7,7 @@
     tools:context=".MainActivity">
 
     <Button
-        android:id="@+id/login"
+        android:id="@+id/loginPage"
         android:layout_width="130dp"
         android:layout_height="wrap_content"
         android:text="@string/login"
@@ -18,14 +18,14 @@
         app:layout_constraintVertical_bias="0.37" />
 
     <Button
-        android:id="@+id/register"
+        android:id="@+id/registerPage"
         android:layout_width="130dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="72dp"
         android:text="@string/register"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/login" />
+        app:layout_constraintTop_toBottomOf="@+id/loginPage" />
 
     <Button
         android:id="@+id/signOut"
@@ -37,6 +37,6 @@
         tools:layout_editor_absoluteY="479dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/register"/>
+        app:layout_constraintTop_toBottomOf="@+id/registerPage"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
