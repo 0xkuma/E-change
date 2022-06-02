@@ -3,11 +3,13 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
-        <entry key="app/src/main/res/drawable/ic_biometric_fingerprint.xml" value="0.17" />
-        <entry key="app/src/main/res/drawable/ic_fingerprint_background.xml" value="0.1975" />
-        <entry key="app/src/main/res/layout/activity_login.xml" value="0.19630192502532928" />
-        <entry key="app/src/main/res/layout/activity_main.xml" value="0.2743362831858407" />
-        <entry key="app/src/main/res/layout/activity_register.xml" value="0.15896739130434784" />
+        <entry key="app/src/main/res/drawable/ic_create_background.xml" value="0.2405" />
+        <entry key="app/src/main/res/drawable/ic_item_create.xml" value="0.2405" />
+        <entry key="app/src/main/res/layout/activity_item.xml" value="0.25" />
+        <entry key="app/src/main/res/layout/item_item.xml" value="0.1" />
+        <entry key="app/src/main/res/layout/list_item.xml" value="0.21770833333333334" />
+        <entry key="app/src/main/res/mipmap-anydpi-v26/ic_create.xml" value="0.2405" />
+        <entry key="app/src/main/res/mipmap-anydpi-v26/ic_create_round.xml" value="0.2245" />
       </map>
     </option>
   </component>
