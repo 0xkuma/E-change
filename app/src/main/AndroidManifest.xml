@@ -22,6 +22,9 @@
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="${MAPS_API_KEY}" />
+<!--        <meta-data-->
+<!--            android:name="CLOUDINARY_URL"-->
+<!--            android:value="cloudinary://oxeddie"/>-->
         <activity
             android:name=".CreateActivity"
             android:exported="false" />

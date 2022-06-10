@@ -26,7 +26,7 @@ class ItemActivity : AppCompatActivity() {
 
         itemArrayList = ArrayList()
 
-        db.collection("items").get().addOnSuccessListener { result ->
+        db.collection("items").whereEqualTo("status","waiting").get().addOnSuccessListener { result ->
             for(document in result) {
                 Log.d(TAG, "${document.id} => ${document.data}")
                 var imageId = document.id
@@ -49,7 +49,7 @@ class ItemActivity : AppCompatActivity() {
 
             val fab = findViewById<FloatingActionButton>(R.id.fab)
             fab.setOnClickListener {
-                var intent = Intent(this, RegisterActivity::class.java)
+                var intent = Intent(this, CreateActivity::class.java)
                 startActivity(intent)
             }
         }

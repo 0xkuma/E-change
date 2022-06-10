@@ -14,8 +14,11 @@ import android.provider.MediaStore
 import android.util.Log
 import android.widget.Button
 import android.widget.ImageView
+import android.widget.TextView
+import android.widget.Toast
 import androidx.activity.result.ActivityResultCallback
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.annotation.RequiresApi
 import com.google.android.gms.location.*
 import com.google.android.gms.location.LocationRequest
 import com.google.android.gms.maps.CameraUpdateFactory
@@ -24,12 +27,19 @@ import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
+import com.google.firebase.Timestamp
+import com.google.firebase.auth.ktx.auth
+import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.ktx.storage
 import java.io.ByteArrayOutputStream
+import java.time.Instant
+import java.time.format.DateTimeFormatter
 import java.util.*
 
 class CreateActivity : AppCompatActivity(), OnMapReadyCallback {
+    val user = Firebase.auth.currentUser
+
     var storage = Firebase.storage
     var storageRef = storage.reference
     private lateinit var mMap: GoogleMap
@@ -38,6 +48,7 @@ class CreateActivity : AppCompatActivity(), OnMapReadyCallback {
     protected var mLocationRequest: LocationRequest? = null
     protected var mGeocoder: Geocoder? = null
     protected var mLocationProvider: FusedLocationProviderClient? = null
+    var imageUid: UUID? = null
 
     companion object {
         var REQUEST_LOCATION = 1
@@ -47,6 +58,9 @@ class CreateActivity : AppCompatActivity(), OnMapReadyCallback {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_create)
         val cameraBtn:Button = findViewById(R.id.cameraBtn)
+        user?.let {
+            val uid = user.uid
+        }
         cameraBtn.setOnClickListener {
             dispatchTakePictureIntent()
         }
@@ -94,16 +108,16 @@ class CreateActivity : AppCompatActivity(), OnMapReadyCallback {
             mLocationRequest!!,
             mLocationCallBack, Looper.getMainLooper()
         )
+        var currentLatLng: LatLng? = null
         mLocationProvider!!.lastLocation.addOnSuccessListener{ location ->
             // Got last known location. In some rare situations this can be null.
-            // 3
             if (location != null) {
-                val currentLatLng = LatLng(location.latitude, location.longitude)
+                currentLatLng = LatLng(location.latitude, location.longitude)
                 mMap.addMarker(
                     MarkerOptions()
-                        .position(currentLatLng)
+                        .position(currentLatLng!!)
                         .title("Your location"))
-                mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(currentLatLng, 12f))
+                mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(currentLatLng!!, 12f))
                 val removeTask = mLocationProvider!!.removeLocationUpdates(mLocationCallBack)
                 removeTask.addOnCompleteListener { task ->
                     if (task.isSuccessful) {
@@ -115,6 +129,29 @@ class CreateActivity : AppCompatActivity(), OnMapReadyCallback {
                 }
             }
         }
+
+        val createItemBtn: Button = findViewById(R.id.createItemBtn)
+        createItemBtn.setOnClickListener {
+            val itemName:TextView = findViewById(R.id.createItemName)
+            val itemRef = Firebase.firestore.collection("items")
+            val item = hashMapOf(
+                "image_url" to "$imageUid.jpg",
+                "name" to itemName.text.toString(),
+                "post_time" to Timestamp.now(),
+                "status" to "waiting",
+                "uid" to (user?.uid ?: ""),
+                "location" to currentLatLng
+            )
+            itemRef.add(item).addOnSuccessListener {
+                Toast.makeText(baseContext, "Create Item success.",
+                    Toast.LENGTH_SHORT).show()
+                val intent = Intent(this, ItemActivity::class.java)
+                startActivity(intent)
+            }
+
+
+        }
+
 
     }
 
@@ -135,13 +172,14 @@ class CreateActivity : AppCompatActivity(), OnMapReadyCallback {
         }
     }
 
+    @RequiresApi(Build.VERSION_CODES.O)
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
             val imageView: ImageView = findViewById(R.id.cameraImage)
             val imageBitmap = data?.extras?.get("data") as Bitmap
             imageView.setImageBitmap(imageBitmap)
-            val imageUid = UUID.randomUUID()
+            imageUid = UUID.randomUUID()
             val mountainsRef = storageRef.child("${imageUid}.jpg")
             val mountainImagesRef = storageRef.child("images/mountains.jpg")
 
@@ -156,7 +194,7 @@ class CreateActivity : AppCompatActivity(), OnMapReadyCallback {
             }.addOnSuccessListener { taskSnapshot ->
                 // taskSnapshot.metadata contains file metadata such as size, content-type, etc.
                 // ...
-
+                // write data to firestore database
             }
 
         }

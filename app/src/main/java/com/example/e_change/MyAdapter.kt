@@ -1,13 +1,17 @@
 package com.example.e_change
 
 import android.app.Activity
+import android.content.ContentValues.TAG
 import android.graphics.BitmapFactory
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import android.widget.ImageView
 import android.widget.TextView
+import com.google.firebase.ktx.Firebase
+import com.google.firebase.storage.ktx.storage
 import com.squareup.picasso.Picasso
 import java.text.SimpleDateFormat
 import java.util.*
@@ -29,11 +33,21 @@ class MyAdapter (private val context:Activity, private val arrayList: ArrayList<
         val netDate = Date(milliseconds)
         val date = sdf.format(netDate).toString()
 
-        Picasso.get().load(arrayList[position].imageUrl).into(imageView);
-        itemName.text = arrayList[position].name
-        lastMsg.text = arrayList[position].lastMessage
-        lastMsgTime.text = date
+        val storage = Firebase.storage
+        val storageRef = storage.reference
+        storageRef.child(arrayList[position].imageUrl).downloadUrl.addOnSuccessListener { img ->
+            Log.d(TAG, img.toString())
+            // Data for "images/island.jpg" is returned, use this as needed
+            Picasso.get().load(img).into(imageView);
+            itemName.text = arrayList[position].name
+            lastMsg.text = arrayList[position].lastMessage
+            lastMsgTime.text = date
+        }.addOnFailureListener { error ->
+            Log.e(TAG, error.toString())
+            // Handle any errors
+        }
 
         return view
+
     }
 }
