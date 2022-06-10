@@ -1,6 +1,7 @@
 package com.example.e_change
 
 import android.content.ContentValues.TAG
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
@@ -23,11 +24,11 @@ class LoginActivity : AppCompatActivity() {
         loginBtn.setOnClickListener {
             val email = findViewById<TextView>(R.id.loginEmail).text.toString()
             val password = findViewById<TextView>(R.id.loginPassword).text.toString();
-            createAccount(email, password)
+            loginAccount(email, password)
         }
     }
 
-    private fun createAccount(email: String, password: String) {
+    private fun loginAccount(email: String, password: String) {
         println(email)
         println(password)
         auth.signInWithEmailAndPassword(email, password)
@@ -37,8 +38,8 @@ class LoginActivity : AppCompatActivity() {
                     Log.d(TAG, "createUserWithEmail:success")
                     Toast.makeText(baseContext, "Login success.",
                         Toast.LENGTH_SHORT).show()
-                    val user = auth.currentUser
-                    updateUI(user)
+                    val intent = Intent(this, ItemActivity::class.java)
+                    startActivity(intent)
                 } else {
                     // If sign in fails, display a message to the user.
                     Log.w(TAG, "createUserWithEmail:failure", task.exception)
