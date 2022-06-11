@@ -7,6 +7,7 @@ import android.os.Bundle
 import android.util.Log
 import android.widget.ListView
 import com.example.e_change.databinding.ActivityMainBinding
+import com.google.android.gms.maps.model.LatLng
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
@@ -30,6 +31,8 @@ class ItemActivity : AppCompatActivity() {
         var lastMsgTimeList = ArrayList<com.google.firebase.Timestamp>()
         var lastMessageList = ArrayList<String>()
         var imageUrlList = ArrayList<String>()
+        var latitudeList = ArrayList<Double>()
+        var longitudeList = ArrayList<Double>()
 
         db.collection("items").whereEqualTo("status","waiting").get().addOnSuccessListener { result ->
             for(document in result) {
@@ -44,10 +47,14 @@ class ItemActivity : AppCompatActivity() {
                 lastMessageList.add(lastMessage)
                 var imageUrl = document.data?.get("image_url") as String
                 imageUrlList.add(imageUrl)
+                var latitude = document.data?.get("latitude") as Double
+                latitudeList.add(latitude)
+                var longitude = document.data?.get("longitude") as Double
+                longitudeList.add(longitude)
                 var item = Item(name, lastMessage, lastMsgTime, imageId, imageUrl)
                 itemArrayList.add(item)
             }
-            Log.d(TAG, nameList.toString())
+            Log.d(TAG, imageUrlList.toString())
             val listview = findViewById<ListView>(R.id.listview)
             listview.isClickable = true
             listview.adapter = MyAdapter(this, itemArrayList)
@@ -59,6 +66,8 @@ class ItemActivity : AppCompatActivity() {
                 intent.putExtra("lastMsgTime",lastMsgTimeList[position])
                 intent.putExtra("lastMessage",lastMessageList[position])
                 intent.putExtra("imageUrl",imageUrlList[position])
+                intent.putExtra("latitude", latitudeList[position])
+                intent.putExtra("longitude", longitudeList[position])
 
                 startActivity(intent)
             }

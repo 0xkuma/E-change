@@ -50,10 +50,6 @@ class CreateActivity : AppCompatActivity(), OnMapReadyCallback {
     protected var mLocationProvider: FusedLocationProviderClient? = null
     var imageUid: UUID? = null
 
-    companion object {
-        var REQUEST_LOCATION = 1
-    }
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_create)
@@ -109,10 +105,14 @@ class CreateActivity : AppCompatActivity(), OnMapReadyCallback {
             mLocationCallBack, Looper.getMainLooper()
         )
         var currentLatLng: LatLng? = null
+        var latitude: Double? = null
+        var longitude: Double? = null
         mLocationProvider!!.lastLocation.addOnSuccessListener{ location ->
             // Got last known location. In some rare situations this can be null.
             if (location != null) {
                 currentLatLng = LatLng(location.latitude, location.longitude)
+                latitude = location.latitude
+                longitude = location.longitude
                 mMap.addMarker(
                     MarkerOptions()
                         .position(currentLatLng!!)
@@ -140,7 +140,9 @@ class CreateActivity : AppCompatActivity(), OnMapReadyCallback {
                 "post_time" to Timestamp.now(),
                 "status" to "waiting",
                 "uid" to (user?.uid ?: ""),
-                "location" to currentLatLng
+                "location" to currentLatLng,
+                "latitude" to latitude,
+                "longitude" to longitude
             )
             itemRef.add(item).addOnSuccessListener {
                 Toast.makeText(baseContext, "Create Item success.",

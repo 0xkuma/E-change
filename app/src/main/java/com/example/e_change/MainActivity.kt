@@ -1,10 +1,11 @@
 package com.example.e_change
 
+import android.content.Context
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Button
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import androidx.biometric.BiometricPrompt
 import androidx.core.content.ContextCompat
 import com.google.firebase.auth.FirebaseAuth
@@ -27,7 +28,7 @@ class MainActivity : AppCompatActivity() {
 
         val loginBtn = findViewById<Button>(R.id.loginPage)
         loginBtn.setOnClickListener {
-            val intent = Intent(this, ItemActivity::class.java)
+            val intent = Intent(this, LoginActivity::class.java)
             startActivity(intent)
         }
 
@@ -56,6 +57,12 @@ class MainActivity : AppCompatActivity() {
                         "Authentication succeeded!", Toast.LENGTH_SHORT
                     )
                         .show()
+                    startActivity(
+                        Intent(this@MainActivity
+                            ,
+                            ItemActivity::class.java
+                        )
+                    )
                 }
 
                 override fun onAuthenticationFailed() {
